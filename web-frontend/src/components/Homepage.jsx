@@ -70,7 +70,7 @@ const Homepage = () => {
       name: "Sarah Johnson",
       role: "CFO, TechStart Inc.",
       content:
-        "NexaFi transformed our financial management. The AI insights helped us optimize cash flow and increase profitability by 30%.",
+        "Flexa transformed our financial management. The AI insights helped us optimize cash flow and increase profitability by 30%.",
       rating: 5,
     },
     {
@@ -100,7 +100,7 @@ const Homepage = () => {
                 <Building className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                NexaFi
+                Flexa
               </span>
             </div>
 
@@ -303,7 +303,7 @@ const Homepage = () => {
               Ready to Transform Your Financial Management?
             </h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Join thousands of businesses already using NexaFi to optimize
+              Join thousands of businesses already using Flexa to optimize
               their financial operations and drive growth.
             </p>
             <Button
@@ -327,7 +327,7 @@ const Homepage = () => {
                 <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                   <Building className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-xl font-bold">NexaFi</span>
+                <span className="text-xl font-bold">Flexa</span>
               </div>
               <p className="text-gray-400">
                 Advanced financial management platform powered by AI.
@@ -414,7 +414,7 @@ const Homepage = () => {
           </div>
 
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 NexaFi. All rights reserved.</p>
+            <p>&copy; 2026 Flexa. All rights reserved.</p>
           </div>
         </div>
       </footer>
