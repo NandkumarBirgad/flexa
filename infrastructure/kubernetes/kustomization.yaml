@@ -1,0 +1,39 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - namespaces.yaml
+  - secrets.example.yaml
+  - storage/pv-pvc.yaml
+  - security/rbac.yaml
+  - security/network-policies.yaml
+  - security/pod-security-standards.yaml
+  - security/auth-service.yaml
+  - security/vault.yaml
+  - infrastructure-components/redis.yaml
+  - infrastructure-components/rabbitmq.yaml
+  - infrastructure-components/elasticsearch.yaml
+  - infrastructure-components/kibana.yaml
+  - core-services/api-gateway.yaml
+  - core-services/user-service.yaml
+  - core-services/ledger-service.yaml
+  - core-services/payment-service.yaml
+  - core-services/ai-service.yaml
+  - core-services/analytics-service.yaml
+  - core-services/credit-service.yaml
+  - core-services/document-service.yaml
+  - hpa.yaml
+  - pdb.yaml
+  - monitoring/prometheus-config.yaml
+  - monitoring/prometheus.yaml
+  - monitoring/alertmanager.yaml
+  - monitoring/grafana.yaml
+  - ingress/nginx-ingress.yaml
+  - backup-recovery/backup-jobs.yaml
+  - backup-recovery/disaster-recovery.yaml
+  - compliance/audit-service.yaml
+  - compliance/compliance-monitor.yaml
+
+commonLabels:
+  app.kubernetes.io/part-of: nexafi
+  app.kubernetes.io/managed-by: kustomize

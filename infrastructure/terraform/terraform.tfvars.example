@@ -1,0 +1,26 @@
+# NexaFi Terraform Variables
+# Copy to terraform.tfvars and fill in your values
+# Do NOT commit terraform.tfvars to version control
+
+environment      = "prod"
+primary_region   = "us-west-2"
+secondary_region = "us-east-1"
+
+vpc_cidr_primary   = "10.0.0.0/16"
+vpc_cidr_secondary = "10.1.0.0/16"
+
+enable_nat_gateway = true
+enable_vpn_gateway = false
+
+eks_cluster_version = "1.29"
+
+# Restrict to your organization's IP ranges in production
+eks_public_access_cidrs = ["YOUR_OFFICE_IP/32", "YOUR_VPN_CIDR/24"]
+
+node_group_instance_types           = ["m5.large", "m5.xlarge"]
+financial_node_group_instance_types = ["c5.xlarge", "c5.2xlarge"]
+
+tags = {
+  Owner      = "platform-team"
+  CostCenter = "engineering"
+}

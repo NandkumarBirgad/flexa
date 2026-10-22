@@ -1,0 +1,144 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nexafi-ingress
+  namespace: nexafi
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "false"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - api.nexafi.com
+      secretName: nexafi-tls
+  rules:
+    - host: api.nexafi.com
+      http:
+        paths:
+          # More-specific paths first, catch-all api-gateway last
+          - path: /users
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service
+                port:
+                  number: 80
+          - path: /ledger
+            pathType: Prefix
+            backend:
+              service:
+                name: ledger-service
+                port:
+                  number: 80
+          - path: /payments
+            pathType: Prefix
+            backend:
+              service:
+                name: payment-service
+                port:
+                  number: 80
+          - path: /ai
+            pathType: Prefix
+            backend:
+              service:
+                name: ai-service
+                port:
+                  number: 80
+          - path: /analytics
+            pathType: Prefix
+            backend:
+              service:
+                name: analytics-service
+                port:
+                  number: 80
+          - path: /credit
+            pathType: Prefix
+            backend:
+              service:
+                name: credit-service
+                port:
+                  number: 80
+          - path: /documents
+            pathType: Prefix
+            backend:
+              service:
+                name: document-service
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway-service
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nexafi-infra-ingress
+  namespace: nexafi-infra
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: nexafi-basic-auth
+    nginx.ingress.kubernetes.io/auth-realm: "Authentication Required - NexaFi Infrastructure"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8,172.16.0.0/12"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - kibana.nexafi.com
+        - rabbitmq.nexafi.com
+      secretName: nexafi-infra-tls
+  rules:
+    - host: kibana.nexafi.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kibana-service
+                port:
+                  number: 5601
+    - host: rabbitmq.nexafi.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rabbitmq-service
+                port:
+                  number: 15672
+---
+# Basic Auth Secret - generate with: htpasswd -nb nexafi <strong-password> | base64
+# Replace the auth value below with your own htpasswd-generated hash.
+# Never use default credentials in production.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nexafi-basic-auth
+  namespace: nexafi-infra
+type: Opaque
+data:
+  # Placeholder - MUST be replaced before deployment
+  # Generate: htpasswd -nb nexafi $(openssl rand -base64 16) | base64
+  auth: <BASE64_HTPASSWD_LINE>
